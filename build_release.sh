@@ -12,9 +12,9 @@ mkdir "$ROOT/Release"
 cd "$DIR"
 
 
-revisionCount=`git log --oneline | wc -l`
-revisionTagName=`git describe --tags --match v*.*.* --abbrev=0`
-revisionHashName=`git log --pretty=format:%h -n 1`
+revisionCount="939"
+revisionTagName="v0.6.2"
+revisionHashName="dfc3b085"
 
 
 # binary linux release
@@ -36,6 +36,10 @@ cp "$PROJ/Tests/galen.owl.xml" "$RELEA/Tests"
 cp "$PROJ/Tests/galen-classify-request.xml" "$RELEA/Tests"
 cp "$PROJ/Tests/roberts-family-full-D.owl.xml" "$RELEA/Tests"
 cp "$PROJ/Tests/roberts-family-full-D-classify-realize-request.xml" "$RELEA/Tests"
+cp "$PROJ/Tests/lubm-univ-bench.owl.xml" "$RELEA/Konclude/Tests"
+cp "$PROJ/Tests/lubm-univ-bench-data-1.ttl" "$RELEA/Konclude/Tests"
+cp "$PROJ/Tests/sparql-load-and-query-test.sparql" "$RELEA/Konclude/Tests"
+cp "$PROJ/Tests/sparql-existential-variables-query-test.sparql" "$RELEA/Konclude/Tests"
 cp "$PROJ/Tests/test-request.xml" "$RELEA/Tests"
 
 cp "$PROJ/Scripts/Konclude" "$RELEA"
@@ -104,6 +108,10 @@ cp "$PROJ/Tests/galen-classify-request.xml" "$SOURCER/Konclude/Tests"
 cp "$PROJ/Tests/galen-ALEHIF+-classify-request.xml" "$SOURCER/Konclude/Tests"
 cp "$PROJ/Tests/roberts-family-full-D.owl.xml" "$SOURCER/Konclude/Tests"
 cp "$PROJ/Tests/roberts-family-full-D-classify-realize-request.xml" "$SOURCER/Konclude/Tests"
+cp "$PROJ/Tests/lubm-univ-bench.owl.xml" "$SOURCER/Konclude/Tests"
+cp "$PROJ/Tests/lubm-univ-bench-data-1.ttl" "$SOURCER/Konclude/Tests"
+cp "$PROJ/Tests/sparql-load-and-query-test.sparql" "$SOURCER/Konclude/Tests"
+cp "$PROJ/Tests/sparql-existential-variables-query-test.sparql" "$SOURCER/Konclude/Tests"
 cp "$PROJ/Tests/test-request.xml" "$SOURCER/Konclude/Tests"
 
 

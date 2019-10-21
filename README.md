@@ -1,7 +1,9 @@
 # Docker Lifecycle Snapshots for Konclude
 
-Based on https://github.com/MatrixManAtYrService/lifecycle-snapshots, these (sub-)directories contain scripts and dockerfiles that allow for building Konclude (within docker containers) and the docker image for excecuting the built version of Konclude.
-The build proceeds in four lifecycle snapshots:
+Based on https://github.com/MatrixManAtYrService/lifecycle-snapshots, these (sub-)directories contain scripts and dockerfiles that allow for building Konclude (within docker containers) and the docker image for excecuting the built version of Konclude. Note that the scripts in this folder assume that the `Konclude` source code is available via the relative file path `../Konclude`, i.e., the folders `Konclude` and `KoncludeDocker` should be siblings and should contain the corresponding project files.
+
+The build proceeds is structured in four lifecycle snapshots:
+
 - Run
 - Develop
 - Build
