@@ -12,9 +12,9 @@ mkdir "$ROOT/Release"
 cd "$DIR"
 
 
-revisionCount="939"
+revisionCount="965"
 revisionTagName="v0.6.2"
-revisionHashName="dfc3b085"
+revisionHashName="fa20b125"
 
 
 # binary linux release
@@ -36,10 +36,11 @@ cp "$PROJ/Tests/galen.owl.xml" "$RELEA/Tests"
 cp "$PROJ/Tests/galen-classify-request.xml" "$RELEA/Tests"
 cp "$PROJ/Tests/roberts-family-full-D.owl.xml" "$RELEA/Tests"
 cp "$PROJ/Tests/roberts-family-full-D-classify-realize-request.xml" "$RELEA/Tests"
-cp "$PROJ/Tests/lubm-univ-bench.owl.xml" "$RELEA/Konclude/Tests"
-cp "$PROJ/Tests/lubm-univ-bench-data-1.ttl" "$RELEA/Konclude/Tests"
-cp "$PROJ/Tests/sparql-load-and-query-test.sparql" "$RELEA/Konclude/Tests"
-cp "$PROJ/Tests/sparql-existential-variables-query-test.sparql" "$RELEA/Konclude/Tests"
+cp "$PROJ/Tests/lubm-univ-bench.owl.xml" "$RELEA/Tests"
+cp "$PROJ/Tests/lubm-univ-bench-data-1.ttl" "$RELEA/Tests"
+cp "$PROJ/Tests/lubm-univ-bench-sparql-load-and-query-test.sparql" "$RELEA/Tests"
+cp "$PROJ/Tests/lubm-univ-bench-sparql-load-and-complex-query-rasqal-test.sparql" "$RELEA/Tests"
+cp "$PROJ/Tests/roberts-family-full-sparql-existential-variables-query-test.sparql" "$RELEA/Tests"
 cp "$PROJ/Tests/test-request.xml" "$RELEA/Tests"
 
 cp "$PROJ/Scripts/Konclude" "$RELEA"
@@ -69,7 +70,7 @@ cp "$ROOT/Konclude/Konclude.pro" "$SOURCER/Konclude"
 cp "$ROOT/Konclude/KoncludeLIB.pro" "$SOURCER/Konclude"
 cp "$ROOT/Konclude/Konclude.pri" "$SOURCER/Konclude"
 cp "$ROOT/Konclude/Konclude-VS15.sln" "$SOURCER/Konclude"
-cp "$ROOT/Konclude/Konclude-VS15.vcproj" "$SOURCER/Konclude"
+cp "$ROOT/Konclude/Konclude-VS15.vcxproj" "$SOURCER/Konclude"
 cp "$ROOT/Konclude/KoncludeWithoutRedland.pro" "$SOURCER/Konclude"
 
 cp "$ROOT/Konclude/UnixGitBuildScript.sh" "$SOURCER/Konclude"
@@ -110,8 +111,9 @@ cp "$PROJ/Tests/roberts-family-full-D.owl.xml" "$SOURCER/Konclude/Tests"
 cp "$PROJ/Tests/roberts-family-full-D-classify-realize-request.xml" "$SOURCER/Konclude/Tests"
 cp "$PROJ/Tests/lubm-univ-bench.owl.xml" "$SOURCER/Konclude/Tests"
 cp "$PROJ/Tests/lubm-univ-bench-data-1.ttl" "$SOURCER/Konclude/Tests"
-cp "$PROJ/Tests/sparql-load-and-query-test.sparql" "$SOURCER/Konclude/Tests"
-cp "$PROJ/Tests/sparql-existential-variables-query-test.sparql" "$SOURCER/Konclude/Tests"
+cp "$PROJ/Tests/lubm-univ-bench-sparql-load-and-query-test.sparql" "$SOURCER/Konclude/Tests"
+cp "$PROJ/Tests/lubm-univ-bench-sparql-load-and-complex-query-rasqal-test.sparql" "$SOURCER/Konclude/Tests"
+cp "$PROJ/Tests/roberts-family-full-sparql-existential-variables-query-test.sparql" "$SOURCER/Konclude/Tests"
 cp "$PROJ/Tests/test-request.xml" "$SOURCER/Konclude/Tests"
 
 

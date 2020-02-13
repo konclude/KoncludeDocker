@@ -13,7 +13,14 @@ python \
 flex \
 bison \
 gperf \
-python-dev
+python-dev \
+autotools-dev \
+automake \
+autoconf \
+libtool \
+gtk-doc-tools \
+libgmp3-dev \
+zlib1g-dev 
 
 
 
@@ -45,6 +52,8 @@ RUN cd /usr/local/src/ \
 
 
 
+
+
 # download, build and install raptor
 RUN cd /usr/local/src/ \
 && wget http://download.librdf.org/source/raptor2-2.0.15.tar.gz \
@@ -60,21 +69,24 @@ RUN cd /usr/local/src/ \
 
 
 
-# download, build and install rasqual
+# download, build and install rasqal
 RUN cd /usr/local/src/ \
-&& wget http://download.librdf.org/source/rasqal-0.9.33.tar.gz \
-&& tar -xvzf rasqal-0.9.33.tar.gz \
-&& mv rasqal-0.9.33 rasqal-static \
+&& git clone git://github.com/konclude/rasqal.git \
+&& mv rasqal rasqal-static \
 && cd rasqal-static \
 \
 && export RAPTOR2_CFLAGS="-I /usr/local/lib/raptor2-static/include/raptor2" \
 && export RAPTOR2_LIBS="-L/usr/local/lib/raptor2-static/lib -lraptor2 -L/usr/local/lib/libxml2-static/lib -lxml2 -lm -ldl" \
 && export RAPTOR_VERSION=2.0.15 \
-&& sed -i -e 's#RAPTOR_VERSION=`$PKG_CONFIG raptor2 --modversion 2>/dev/null`#if test -n "$RAPTOR_VERSION"; then echo "Assuming raptor version $RAPTOR_VERSION"; else RAPTOR_VERSION=`$PKG_CONFIG raptor2 --modversion 2>/dev/null`; fi#g' configure \
+&& sed -i -e 's#RAPTOR_VERSION=`$PKG_CONFIG raptor2 --modversion 2>/dev/null`#if test -n "$RAPTOR_VERSION"; then echo "Assuming raptor version $RAPTOR_VERSION"; else RAPTOR_VERSION=`$PKG_CONFIG raptor2 --modversion 2>/dev/null`; fi#g' configure.ac \
+&& git log --oneline | grep -q 0c42ebc \
 \
-&& ./configure --prefix=/usr/local/lib/rasqal-static \
+&& ./autogen.sh --prefix=/usr/local/lib/rasqal-static \
 && make -j \
 && make install
+
+
+
 
 
 
@@ -108,6 +120,8 @@ COPY revision-git.h /usr/local/src/konclude-static
 COPY UnixGitBuildScript.sh /usr/local/src/konclude-static
 
 
+
+
 # remove intermediate files (to ensure a clean build later)
 RUN rm -rf usr/local/src/konclude-static/Release \
 && rm -rf usr/local/src/konclude-static/release \
@@ -139,7 +153,6 @@ RUN cp /usr/local/lib/libxml2-static/lib/libxml2.so.2.9.9 /usr/local/src/konclud
 && cp /usr/local/lib/redland-static/lib/librdf.so /usr/local/src/konclude-static/External/librdf/Linux/x64/lib/release \
 && cp /usr/local/lib/redland-static/lib/librdf.la /usr/local/src/konclude-static/External/librdf/Linux/x64/lib/release \
 && cp /usr/local/lib/redland-static/lib/librdf.a /usr/local/src/konclude-static/External/librdf/Linux/x64/lib/release
-
 
 
 
