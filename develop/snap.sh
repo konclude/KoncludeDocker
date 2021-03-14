@@ -19,25 +19,9 @@ echo "Taking snapshot: 'develop'"
 # git reset --hard
 # git pull origin master
 
-# copy the dockerfile to the project root so it can be a parent of the source
-# (necessary because docker hashes children to see if rebuilding a layer is needed)
-cp -p "$DIR/Dockerfile" "$ROOT"
-
-
-cd "$ROOT"
-
-mkdir -p "$ROOT/Konclude/External/librdf/Linux/x64/lib/release"
-
-cp "$ROOT/Konclude/revision-git.h" "$ROOT"
-Konclude/UnixGitBuildScript.sh
-echo "#!/bin/bash" > UnixGitBuildScript.sh
-chmod a+x UnixGitBuildScript.sh
+cd "$DIR"
 
 docker build . -t "koncludedev:latest"
-
-rm revision-git.h
-rm UnixGitBuildScript.sh
-rm "$ROOT/Dockerfile"
 
 echo "To explore 'develop' run:"
 echo "docker run --rm -it koncludedev /bin/bash"

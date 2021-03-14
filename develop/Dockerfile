@@ -11,7 +11,6 @@ wget \
 xz-utils \
 python \
 flex \
-bison \
 gperf \
 python-dev \
 autotools-dev \
@@ -24,19 +23,26 @@ zlib1g-dev
 
 
 
-
+RUN cd /usr/local/src/ \
+&& wget http://ftp.gnu.org/gnu/bison/bison-3.7.6.tar.gz \
+&& tar -zxvf bison-3.7.6.tar.gz \
+&& cd bison-3.7.6 \
+&& ./configure \
+&& make \
+&& sudo make install
 
 
 # download, build and install qt
 RUN cd /usr/local/src/ \
-&& wget https://download.qt.io/official_releases/qt/5.13/5.13.0/single/qt-everywhere-src-5.13.0.tar.xz \
-&& tar -xJf qt-everywhere-src-5.13.0.tar.xz \
-&& mv qt-everywhere-src-5.13.0 qt-static \
+&& wget -q https://download.qt.io/official_releases/qt/5.12/5.12.10/single/qt-everywhere-src-5.12.10.tar.xz \
+&& tar -xJf qt-everywhere-src-5.12.10.tar.xz \
+&& mv qt-everywhere-src-5.12.10 qt-static \
 && cd /usr/local/src/qt-static \
 && export MAKE=/usr/bin/make \
-&& ./configure -static -prefix /usr/local/lib/qt-static -extprefix /usr/local/lib/qt-static -no-opengl -nomake examples -nomake tests -opensource -platform linux-g++-64 -no-icu -confirm-license -opensource \
-&& make -j \
-&& make install
+&& ./configure -static -prefix /usr/local/lib/qt-static -extprefix /usr/local/lib/qt-static -no-opengl -nomake examples -nomake tests -nomake tools -skip webview -skip webchannel -skip 3d -skip script -skip webengine -opensource -platform linux-g++-64 -no-icu -confirm-license -opensource \
+&& make \
+&& make install \
+&& make clean
 
 
 
@@ -47,7 +53,7 @@ RUN cd /usr/local/src/ \
 && mv libxml2-2.9.9 libxml2-static \
 && cd libxml2-static \
 && ./configure --prefix=/usr/local/lib/libxml2-static \
-&& make -j \
+&& make \
 && make install
 
 
@@ -64,7 +70,7 @@ RUN cd /usr/local/src/ \
 && export LIBXML_LIBS="-L/usr/local/lib/libxml2-static/lib -lxml2" \
 && export LIBXML_LIBS="/usr/local/lib/libxml2-static/libxml2.a" \
 && ./configure --prefix=/usr/local/lib/raptor2-static --with-xml2-config=/usr/local/lib/libxml2-static/bin/xml2-config \
-&& make -j \
+&& make \
 && make install
 
 
@@ -82,7 +88,11 @@ RUN cd /usr/local/src/ \
 && git log --oneline | grep -q 0c42ebc \
 \
 && ./autogen.sh --prefix=/usr/local/lib/rasqal-static \
-&& make -j \
+&& (make \
+|| (sed -i -e 's#yycleanup(yyscanner);# #g' src/sparql_lexer.c \
+&& sed -i -e 's#extern int yylex#extern int sparql_lexer_lex#g' src/sparql_lexer.h \
+&& sed -i -e 's#define YY_DECL int yylex#define YY_DECL int sparql_lexer_lex#g' src/sparql_lexer.h \
+&& make -j)) \
 && make install
 
 
@@ -108,52 +118,21 @@ RUN cd /usr/local/src/ \
 && sed -i -e 's#RASQAL_VERSION=`$PKG_CONFIG rasqal --modversion 2>/dev/null`#if test -n "$RASQAL_VERSION"; then echo "Assuming rasqal version $RASQAL_VERSION"; else RASQAL_VERSION=`$PKG_CONFIG rasqal --modversion 2>/dev/null`; fi#g' configure \
 \
 && ./configure --prefix=/usr/local/lib/redland-static \
-&& make -j \
+&& make \
 && make install
 
 
 
 
-# include the source code of Konclude
-COPY Konclude/ /usr/local/src/konclude-static
-COPY revision-git.h /usr/local/src/konclude-static
-COPY UnixGitBuildScript.sh /usr/local/src/konclude-static
 
 
-
-
-# remove intermediate files (to ensure a clean build later)
-RUN rm -rf usr/local/src/konclude-static/Release \
-&& rm -rf usr/local/src/konclude-static/release \
-&& rm -rf usr/local/src/konclude-static/GeneratedFiles
-
-
-
-
-RUN cp /usr/local/lib/libxml2-static/lib/libxml2.so.2.9.9 /usr/local/src/konclude-static/External/librdf/Linux/x64/lib/release \
-&& cp /usr/local/lib/libxml2-static/lib/libxml2.so.2 /usr/local/src/konclude-static/External/librdf/Linux/x64/lib/release \
-&& cp /usr/local/lib/libxml2-static/lib/libxml2.so /usr/local/src/konclude-static/External/librdf/Linux/x64/lib/release \
-&& cp /usr/local/lib/libxml2-static/lib/libxml2.la /usr/local/src/konclude-static/External/librdf/Linux/x64/lib/release \
-&& cp /usr/local/lib/libxml2-static/lib/libxml2.a /usr/local/src/konclude-static/External/librdf/Linux/x64/lib/release \
-\
-&& cp /usr/local/lib/raptor2-static/lib/libraptor2.so.0.0.0 /usr/local/src/konclude-static/External/librdf/Linux/x64/lib/release \
-&& cp /usr/local/lib/raptor2-static/lib/libraptor2.so.0 /usr/local/src/konclude-static/External/librdf/Linux/x64/lib/release \
-&& cp /usr/local/lib/raptor2-static/lib/libraptor2.so /usr/local/src/konclude-static/External/librdf/Linux/x64/lib/release \
-&& cp /usr/local/lib/raptor2-static/lib/libraptor2.la /usr/local/src/konclude-static/External/librdf/Linux/x64/lib/release \
-&& cp /usr/local/lib/raptor2-static/lib/libraptor2.a /usr/local/src/konclude-static/External/librdf/Linux/x64/lib/release \
-\
-&& cp /usr/local/lib/rasqal-static/lib/librasqal.so.3.0.0 /usr/local/src/konclude-static/External/librdf/Linux/x64/lib/release \
-&& cp /usr/local/lib/rasqal-static/lib/librasqal.so.3 /usr/local/src/konclude-static/External/librdf/Linux/x64/lib/release \
-&& cp /usr/local/lib/rasqal-static/lib/librasqal.so /usr/local/src/konclude-static/External/librdf/Linux/x64/lib/release \
-&& cp /usr/local/lib/rasqal-static/lib/librasqal.la /usr/local/src/konclude-static/External/librdf/Linux/x64/lib/release \
-&& cp /usr/local/lib/rasqal-static/lib/librasqal.a /usr/local/src/konclude-static/External/librdf/Linux/x64/lib/release \
-\
-&& cp /usr/local/lib/redland-static/lib/librdf.so.0.0.0 /usr/local/src/konclude-static/External/librdf/Linux/x64/lib/release \
-&& cp /usr/local/lib/redland-static/lib/librdf.so.0 /usr/local/src/konclude-static/External/librdf/Linux/x64/lib/release \
-&& cp /usr/local/lib/redland-static/lib/librdf.so /usr/local/src/konclude-static/External/librdf/Linux/x64/lib/release \
-&& cp /usr/local/lib/redland-static/lib/librdf.la /usr/local/src/konclude-static/External/librdf/Linux/x64/lib/release \
-&& cp /usr/local/lib/redland-static/lib/librdf.a /usr/local/src/konclude-static/External/librdf/Linux/x64/lib/release
-
-
+RUN cd /usr/local/src/ \
+&& wget https://github.com/jemalloc/jemalloc/releases/download/5.2.1/jemalloc-5.2.1.tar.bz2 \
+&& tar -xf jemalloc-5.2.1.tar.bz2 --no-same-owner \
+&& mv jemalloc-5.2.1 jemalloc-static \
+&& cd jemalloc-static \
+&& ./configure --prefix=/usr/local/lib/jemalloc-static \
+&& make \
+&& make install
 
 
