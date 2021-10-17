@@ -1,5 +1,5 @@
 # This dockerfile defines the expected runtime environment before the project is installed
-FROM ubuntu:14.04
+FROM ubuntu:trusty-20190515
 
 # Be sure to install any runtime dependencies
 RUN apt-get clean && apt-get update
